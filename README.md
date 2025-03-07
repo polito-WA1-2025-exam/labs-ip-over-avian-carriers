@@ -1,11 +1,11 @@
-# Group "GROUP NAME"
+# Group IP over Avian Carriers
 
 ## Members
 - s343884 ABELLONIO ANDREA
-- s123456 LASTNAME FIRSTNAME
+- s347640 Kostadinov Iliyan
 - s123456 LASTNAME FIRSTNAME
 
-# Exercise "NAME OF EXERCISE"
+# Exercise Poke
 
 # Lab Journal
 
