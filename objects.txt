@@ -1,0 +1,24 @@
+-size
+    -uniqueId
+    -maxQty
+    -maxProteins
+    -maxIngridients
+    -price
+
+-pokeBowl
+    -uniqueId
+    -size (sizeUniqueId)
+    -base (string)
+    -proteins (list of string, not null)
+    -ingridients (list of string, not null)
+    -qty
+
+-order
+    -uniqueId
+    -listPokeBowl (list of pokeBowlUniqueId)
+    -totalPrice
+    -notes (string)
+
+-user
+    -uniqueId
+    -historyOrders (list of orderUniqueId)
