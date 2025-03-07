@@ -2,7 +2,7 @@
 
 ## Members
 - s343884 ABELLONIO ANDREA
-- s347640 Kostadinov Iliyan
+- s347640 KOSTADINOV ILIYAN
 - s123456 LASTNAME FIRSTNAME
 
 # Exercise Poke
