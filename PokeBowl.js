@@ -1,9 +1,11 @@
+import Sizes from './Size.js';
+
 function PokeBowl(sizeUniqueId, base, qty) {
     this.uniqueId = generateUniqueId();
     this.sizeUniqueId = sizeUniqueId;
     this.base = base;
     this.proteins = [];
-    this.ingridients = [];
+    this.ingredients = [];
     this.qty = qty;
 
     this.addProtein = (protein) => {
@@ -16,18 +18,18 @@ function PokeBowl(sizeUniqueId, base, qty) {
         }
     }
 
-    this.addIngridient = (ingridient) => {
-        if (this.ingridients.length >= this.size.maxIngridients) {
+    this.addIngredient = (ingredient) => {
+        if (this.ingredients.length >= this.size.maxIngredients) {
             //no se puede agregar mas ingredientes
             return;
         }
         else {
-            this.ingridients.push(ingridient);
+            this.ingredients.push(ingredient);
         }
     }
 
     this.checkMinIngredients = () => {
-        if (this.ingridients.length < 1) { //check that there is at least one ingredient
+        if (this.ingredients.length < 1) { //check that there is at least one ingredient
             return false;
         }
         return true;

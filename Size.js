@@ -13,3 +13,5 @@ function Sizes() {
         this.listSizes.push(size);
     }
 }
+
+export default Sizes;

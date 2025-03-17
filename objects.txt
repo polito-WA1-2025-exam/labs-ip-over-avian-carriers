@@ -2,7 +2,7 @@
     -uniqueId
     -maxQty
     -maxProteins
-    -maxIngridients
+    -maxIngredients
     -price
 
 -pokeBowl
@@ -10,7 +10,7 @@
     -size (sizeUniqueId)
     -base (string)
     -proteins (list of string, not null)
-    -ingridients (list of string, not null)
+    -ingredients (list of string, not null)
     -qty
 
 -order
