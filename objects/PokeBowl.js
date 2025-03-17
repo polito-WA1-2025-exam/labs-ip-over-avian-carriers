@@ -1,9 +1,10 @@
 import Sizes from './Size.js';
 
-function PokeBowl(sizeUniqueId, base, qty) {
-    this.uniqueId = generateUniqueId();
-    this.sizeUniqueId = sizeUniqueId;
+function PokeBowl(pokeBowlId, sizeId, base, qty, orderId) {
+    this.pokeBowlId = pokeBowlId;
+    this.sizeId = sizeId;
     this.base = base;
+    this.orderId = orderId;
     this.proteins = [];
     this.ingredients = [];
     this.qty = qty;

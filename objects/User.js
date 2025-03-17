@@ -1,5 +1,8 @@
-function User() {
-    this.uniqueId = generateUniqueId();
+function User(email, name, surname, password) {
+    this.email = email;
+    this.name = name;
+    this.surname = surname;
+    this.password = password;
     this.historyOrders = [];
 
     this.addOrder = (order) => {

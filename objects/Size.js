@@ -1,6 +1,6 @@
-function Size(maxQty, maxProteins, maxIngridients, price) {
-    this.uniqueId = generateUniqueId();
-    this.maxQty = maxQty;
+function Size(sizeId, maxDayQty, maxProteins, maxIngridients, price) {
+    this.sizeId = sizeId;
+    this.maxDayQty = maxDayQty;
     this.maxProteins = maxProteins;
     this.maxIngridients = maxIngridients;
     this.price = price;
