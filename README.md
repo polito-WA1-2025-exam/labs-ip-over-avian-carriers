@@ -1,64 +1,84 @@
 # Group IP over Avian Carriers
 
+## Exercise: Poke
+
+### Readme index
+- [Members](#members)
+- [Lab Journal](#lab-journal)
+- [Database structure overview](#database-structure-overview)
+
 ## Members
 - s343884 ABELLONIO ANDREA
 - s347640 KOSTADINOV ILIYAN
 - s300122 DE BLASIO LORENZO
 
-# Exercise Poke
+## Lab Journal
 
-# Lab Journal
+## Database Structure Overview
 
-Database Structure Overview
+### TABLES
 
-Table: SIZES
-Attributes:
--   id (INTEGER, PK)
--   maxDayQty (INTEGER)
--   maxProteins (INTEGER)
--   maxIngredients (INTEGER)
--   price (REAL)
+#### 1. SIZES
 
-Table: INGREDIENTS
-Attributes:
--   id (INTEGER, PK)
--   name (TEXT)
+| Attribute      | Type     |
+|----------------|----------|
+| id             | INTEGER, PK |
+| maxDayQty      | INTEGER  |
+| maxProteins    | INTEGER  |
+| maxIngredients | INTEGER  |
+| price          | REAL     |
+#### 2. INGREDIENTS
 
-Table: POKEBOWLS_INGREDIENTS
-Attributes:
--   idPokeBowls (INTEGER, FK POKEBOWLS Table)
--   idIngredients (INTEGER, FK INGREDIENTS table)
+| Attribute | Type     |
+|-----------|----------|
+| id        | INTEGER, PK |
+| name      | TEXT     |
 
-Table: PROTEINS
-Attributes:
--   id (INTEGER, PK)
--   name (TEXT)
+#### 3. POKEBOWLS_INGREDIENTS
 
-Table: POKEBOWLS_PROTEINS
-Attributes:
--   idPokeBowls (INTEGER, FK POKEBOWLS Table)
--   idProteins (INTEGER, FK PROTEINS Table)
+| Attribute      | Type                   |
+|----------------|------------------------|
+| idPokeBowls    | INTEGER, FK POKEBOWLS Table |
+| idIngredients  | INTEGER, FK INGREDIENTS Table |
 
-Table: POKEBOWLS
-Attributes:
--   id (INTEGER, PK)
--   idSize (INTEGER, FK SIZES Table)
--   base (TEXT)
--   qty (INTEGER)
--   idOrder (INTEGER, FK ORDER Table)
+#### 4. PROTEINS
 
-Table: USER
-Attributes:
--   email (TEXT, PK)
--   name (TEXT)
--   surname (TEXT)
--   password (TEXT)
+| Attribute | Type     |
+|-----------|----------|
+| id        | INTEGER, PK |
+| name      | TEXT     |
 
-Table: ORDER
-Attributes:
--   id (INTEGER, PK)
--   totalPrice (REAL)
--   notes (TEXT)
--   idUser (TEXT, FK USER Table) 
+#### 5. POKEBOWLS_PROTEINS
 
-(you may update this file to keep track of the progress of your group work, throughout the weeks)
+| Attribute      | Type                   |
+|----------------|------------------------|
+| idPokeBowls    | INTEGER, FK POKEBOWLS Table |
+| idProteins     | INTEGER, FK PROTEINS Table |
+
+#### 6. POKEBOWLS
+
+| Attribute | Type                   |
+|-----------|------------------------|
+| id        | INTEGER, PK            |
+| idSize    | INTEGER, FK SIZES Table|
+| base      | TEXT                   |
+| qty       | INTEGER                |
+| idOrder   | INTEGER, FK ORDER Table|
+
+#### 7. USER
+
+| Attribute | Type     |
+|-----------|----------|
+| email     | TEXT, PK |
+| name      | TEXT     |
+| surname   | TEXT     |
+| password  | TEXT     |
+
+#### 8. ORDER
+
+| Attribute  | Type     |
+|------------|----------|
+| id         | INTEGER, PK |
+| totalPrice | REAL     |
+| notes      | TEXT     |
+| idUser     | TEXT, FK USER Table |
