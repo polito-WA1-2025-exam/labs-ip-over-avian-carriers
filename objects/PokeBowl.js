@@ -44,3 +44,5 @@ function PokeBowls() {
         this.listPokeBowls.push(pokeBowl);
     }
 }
+
+module.exports = { PokeBowl, PokeBowls }

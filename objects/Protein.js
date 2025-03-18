@@ -3,3 +3,5 @@ function Protein(proteinId, name){
     this.name = name;
     
 }
+
+export default Protein;

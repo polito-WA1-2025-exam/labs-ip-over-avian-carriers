@@ -3,3 +3,5 @@ function Ingredient(ingredientId, name){
     this.name = name;
 
 }
+
+export default Ingredient;

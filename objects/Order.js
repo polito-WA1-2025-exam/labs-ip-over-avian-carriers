@@ -17,3 +17,5 @@ function Orders() {
         this.listOrders.push(order);
     }
 }
+
+module.exports = { Order, Orders}

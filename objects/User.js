@@ -17,3 +17,5 @@ function Users() {
         this.listUsers.push(user);
     }
 }
+
+export { User, Users };
