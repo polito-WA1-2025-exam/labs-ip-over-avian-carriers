@@ -18,4 +18,4 @@ function Orders() {
     }
 }
 
-module.exports = { Order, Orders}
+export default {Order, Orders};

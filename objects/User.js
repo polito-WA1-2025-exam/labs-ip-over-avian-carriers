@@ -18,4 +18,4 @@ function Users() {
     }
 }
 
-export { User, Users };
+export default { User, Users };

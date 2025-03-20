@@ -45,4 +45,4 @@ function PokeBowls() {
     }
 }
 
-module.exports = { PokeBowl, PokeBowls }
+export default { PokeBowl, PokeBowls };
