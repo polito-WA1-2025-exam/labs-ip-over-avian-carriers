@@ -46,7 +46,7 @@ export const addProtein = async (protein) => {
     }
 }
 
-export const deleteIngredient = async (proteinId) => {
+export const deleteProtein = async (proteinId) => {
     try {
         await new Promise((resolve, reject) => {
             db.run('DELETE FROM proteins WHERE id = ?', [proteindId], (err) => {
