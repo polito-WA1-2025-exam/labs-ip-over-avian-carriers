@@ -1,5 +1,3 @@
-import Sizes from './Size.js';
-
 export default class PokeBowl{
     constructor(pokeBowlId, sizeId, base, qty, orderId) {
         this.pokeBowlId = pokeBowlId;
