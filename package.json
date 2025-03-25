@@ -1,0 +1,23 @@
+{
+  "name": "pokebowls-website",
+  "version": "1.0.0",
+  "description": "project group for webapp laboratory",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polito-WA1-2025-exam/labs-ip-over-avian-carriers.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polito-WA1-2025-exam/labs-ip-over-avian-carriers/issues"
+  },
+  "homepage": "https://github.com/polito-WA1-2025-exam/labs-ip-over-avian-carriers#readme",
+  "type": "module",
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  }
+}

@@ -1,11 +1,15 @@
-function User(email, name, surname, password) {
-    this.email = email;
-    this.name = name;
-    this.surname = surname;
-    this.password = password;
-    this.historyOrders = [];
+export default class User {
+    constructor(email, name, surname, password) {
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+    }
 
-    this.addOrder = (order) => {
+    addOrder(order) {
+        if (!this.historyOrders) {
+            this.historyOrders = [];
+        }
         this.historyOrders.push(order);
     }
 }
@@ -18,4 +22,3 @@ function Users() {
     }
 }
 
-export default { User, Users };

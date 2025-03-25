@@ -1,5 +1,5 @@
 import sqlite3 from 'sqlite3';
-import { Size } from '../objects/Size';
+import Size from '../objects/Size.js';
 
 const db = new sqlite3.Database('db.sqlite', (err) => {
     if (err) {
@@ -55,11 +55,11 @@ export const getSizeById = async (sizeId) => {
 export const addSize = async (size) => {
     try {
         await new Promise((resolve, reject) => {
-            db.run('INSERT INTO sizes (id, maxDayQty, maxProteins, maxIngridients, price) VALUES (?, ?, ?, ?, ?)', [size.id, size.maxDayQty, size.maxProteins, size.maxIngridients, size.price], (err) => {
+            db.run('INSERT INTO sizes (maxDayQty, maxProteins, maxIngridients, price) VALUES (?, ?, ?, ?, ?)', [size.maxDayQty, size.maxProteins, size.maxIngridients, size.price], (err) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.lastID);
                 }
             });
         });
@@ -75,7 +75,7 @@ export const deleteSize = async (sizeId) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });
@@ -91,7 +91,7 @@ export const updateQty = async (sizeId, maxDayQty) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });
@@ -107,7 +107,7 @@ export const updateProteins = async (sizeId, maxProteins) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });
@@ -123,7 +123,7 @@ export const updateIngridients = async (sizeId, maxIngridients) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });

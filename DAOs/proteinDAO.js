@@ -1,5 +1,5 @@
 import sqlite3 from 'sqlite3';
-import { Ingredient } from '../models/ingredient.js';
+import Protein from '../objects/Protein.js';
 
 const db = new sqlite3.Database('db.sqlite', (err) => {
     if (err) {
@@ -33,11 +33,11 @@ export const listProteins = async () => {
 export const addProtein = async (protein) => {
     try {
         await new Promise((resolve, reject) => {
-            db.run('INSERT INTO proteins (id, name) VALUES (?, ?)', [protein.id, protein.name], (err) => {
+            db.run('INSERT INTO proteins (name) VALUES (?)', [protein.name], (err) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.lastID);
                 }
             });
         });
@@ -53,7 +53,7 @@ export const deleteProtein = async (proteinId) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });

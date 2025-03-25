@@ -1,5 +1,5 @@
 import sqlite3 from 'sqlite3';
-import { Order } from '../models/order.js';
+import Order from '../objects/Order.js';
 
 const db = new sqlite3.Database('db.sqlite', (err) => {
     if (err) {
@@ -50,11 +50,11 @@ export const listUserOrders = async (userId) => {
 export const addOrder = async (order) => {
     try {
         await new Promise((resolve, reject) => {
-            db.run('INSERT INTO order (id, totalPrice, notes, idUser) VALUES (?, ?, ?, ?)', [order.id, order.totalPrice, order.notes, order.userId], (err) => {
+            db.run('INSERT INTO order (totalPrice, notes, idUser) VALUES (?, ?, ?)', [order.totalPrice, order.notes, order.userId], (err) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.lastID);
                 }
             });
         });
@@ -70,7 +70,7 @@ export const deleteOrder = async (userId) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });

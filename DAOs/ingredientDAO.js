@@ -1,6 +1,5 @@
 import sqlite3 from 'sqlite3';
-import { Ingredient } from '../objects/ingredient.js';
-
+import Ingredient from '../objects/Ingredient.js';
 const db = new sqlite3.Database('db.sqlite', (err) => {
     if (err) {
         console.error('Error opening database', err);
@@ -33,11 +32,11 @@ export const listIngredients = async () => {
 export const addIngredient = async (ingredient) => {
     try {
         await new Promise((resolve, reject) => {
-            db.run('INSERT INTO ingredients (id, name) VALUES (?, ?)', [ingredient.ingredientId, ingredient.name], (err) => {
+            db.run('INSERT INTO ingredients (name) VALUES (?)', [ingredient.name], (err) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.lastID);
                 }
             });
         });
@@ -53,7 +52,7 @@ export const deleteIngredient = async (ingredientId) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(this.changes);
                 }
             });
         });
