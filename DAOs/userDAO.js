@@ -9,32 +9,28 @@ const db = new sqlite3.Database('db.sqlite', (err) => {
 }
 );
 
-export const getUserByEmail = async (email) => {
-    try {
-        const row = await new Promise((resolve, reject) => {
-            db.get('SELECT * FROM USER WHERE email = ?', [email], (err, row) => {
-                if (err) {
-                    reject(err);
+export const getUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        //get because we need only ONE user
+        db.get('SELECT * FROM USERS WHERE email = ?', [email], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                if (row) {
+                    const user = new User(row.email, row.name, row.surname, row.password);
+                    resolve(user);
                 } else {
-                    resolve(row);
+                    reject();
                 }
-            });
+            }
         });
-
-        if (row) {
-            return new User(row.email, row.name, row.surname, row.password);
-        } else {
-            return null;
-        }
-    } catch (err) {
-        throw err;
-    }
+    });
 };
 
-export const changePassword = async (email, newPassword) => {
+export const changePassword = (email, newPassword) => {
     try {
-        await new Promise((resolve, reject) => {
-            db.run('UPDATE USER SET password = ? WHERE email = ?', [newPassword, email], (err) => {
+        return new Promise((resolve, reject) => {
+            db.run('UPDATE USERS SET password = ? WHERE email = ?', [newPassword, email], (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -47,10 +43,10 @@ export const changePassword = async (email, newPassword) => {
     }
 }
 
-export const addUser = async (user) => {
+export const addUser = (user) => {
     try {
-        await new Promise((resolve, reject) => {
-            db.run('INSERT INTO USER (email, name, surname, password) VALUES (?, ?, ?, ?)', [user.email, user.name, user.surname, user.password], (err) => {
+        return new Promise((resolve, reject) => {
+            db.run('INSERT INTO USERS (email, name, surname, password) VALUES (?, ?, ?, ?)', [user.email, user.name, user.surname, user.password], (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -63,10 +59,10 @@ export const addUser = async (user) => {
     }
 }
 
-export const deleteUser = async (email) => {
+export const deleteUser = (email) => {
     try {
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM USER WHERE email = ?', [email], (err) => {
+        return new Promise((resolve, reject) => {
+            db.run('DELETE FROM USERS WHERE email = ?', [email], (err) => {
                 if (err) {
                     reject(err);
                 } else {

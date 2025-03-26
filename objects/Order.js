@@ -6,7 +6,7 @@ export default class Order{
         this.notes = notes;
         this.userId = userId;
 
-        addPokeBowl = (pokeBowl) => {
+        function addPokeBowl(pokeBowl) {
             this.listPokeBowl.push(pokeBowl);
         }
     }

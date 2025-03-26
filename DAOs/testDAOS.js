@@ -8,12 +8,16 @@ import User from "../objects/User.js";
 
 // TEST TABLE USERS
 
-const user = getUserByEmail("prova@mail.com");
+const user = await getUserByEmail("prova@mail.com");
 console.log(user);
-
+/*
 const user2 = new User("mail@mail", "name", "surname", "password");
 addUser(user2);
 
 deleteUser("mail@mail");
+*/
+
+const ingredients = await listUserOrders("prova@mail.com");
+console.log(ingredients);
 
 //

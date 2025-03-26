@@ -7,74 +7,60 @@ const db = new sqlite3.Database('db.sqlite', (err) => {
     }
 });
 
-export const listUserOrders = async (userId) => {
-    const orders = [];
-    try {
-        const rows = await new Promise((resolve, reject) => {
-            db.all('SELECT * FROM order WHERE idUser = ?', [userId], (err, rows) => {
+export const listUserOrders = (userId) => {
+    return new Promise((resolve, reject) => {
+        if (userId != null) {
+            const orders = [];
+            db.all('SELECT * FROM ORDERS WHERE idUser = ?', [userId], (err, rows) => {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(rows);
+                    rows.forEach(row => {
+                        orders.push(new Order(row.id, row.totalPrice, row.notes, row.idUser));
+                    });
+
+                    orders.forEach(async (order) => {
+                        await db.all('SELECT * FROM POKEBOWLS WHERE idOrder = ?', [order.id], (err, rows) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                rows.forEach(row => {
+                                    order.addPokeBowl(row["id"]);
+                                });
+                            }
+                        });
+                    });
+                    resolve(orders);
                 }
             });
-        });
- 
-        rows.forEach(row => {
-            orders.push(new Order(row.id, row.totalPrice, row.notes, row.idUser));
-        });
-
-    } catch (err) {
-        throw err;
-    }
-
-   orders.forEach(async (order) => {
-         const pokeBowlRows = await new Promise((resolve, reject) => {
-              db.all('SELECT * FROM pokebowls WHERE idOrder = ?', [order.id], (err, rows) => {
-                if (err) {
-                     reject(err);
-                } else {
-                     resolve(rows);
-                }
-              });
-         });
-    
-         pokeBowlRows.forEach(pokeBowlRow => {
-              order.addPokeBowl(pokeBowlRow);
-         });
+        }
+        else{
+            reject(new Error("userId is null"));
+        }
     });
-
-   return orders;
 }
 
-export const addOrder = async (order) => {
-    try {
-        await new Promise((resolve, reject) => {
-            db.run('INSERT INTO order (totalPrice, notes, idUser) VALUES (?, ?, ?)', [order.totalPrice, order.notes, order.userId], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.lastID);
-                }
-            });
+export const addOrder = (order) => {
+    return new Promise((resolve, reject) => {
+        db.run('INSERT INTO ORDERS (totalPrice, notes, idUser) VALUES (?, ?, ?)', [order.totalPrice, order.notes, order.userId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(this.lastID);
+            }
         });
-    } catch (err) {
-        throw err;
-    }
+    });
 }
 
-export const deleteOrder = async (userId) => {
-    try {
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM order WHERE idUser = ?', [userId], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
+export const deleteOrder = (userId) => {
+
+    return new Promise((resolve, reject) => {
+        db.run('DELETE FROM ORDERS WHERE idUser = ?', [userId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(this.changes);
+            }
         });
-    } catch (err) {
-        throw err
-    }
+    });
 }

@@ -4,5 +4,3 @@ export default class Ingredient {
         this.name = name;
     }
 }
-
-
