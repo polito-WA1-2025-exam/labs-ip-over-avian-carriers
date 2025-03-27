@@ -1,63 +1,24 @@
-import sqlite3 from 'sqlite3';
 import Protein from '../objects/Protein.js';
+import Database from 'better-sqlite3';
+const db = new Database('../db.sqlite');
+db.pragma('journal_mode = WAL');
 
-const db = new sqlite3.Database('db.sqlite', (err) => {
-    if (err) {
-        console.error('Error opening database', err);
-    }
-});
 
-export const listProteins = async () => {
-    try {
-        const rows = await new Promise((resolve, reject) => {
-            db.all('SELECT * FROM proteins', (err, rows) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(rows);
-                }
-            });
-        });
+export const listProteins = () => {
+    const rows = db.prepare('SELECT * FROM PROTEINS').all();
 
-        const proteins = [];
-        rows.forEach(row => {
-            proteins.push(new Protein(row.id, row.name));
-        });
-
-        return proteins;
-    } catch (err) {
-        throw err;
-    }
+    const proteins = [];
+    rows.forEach(row => {
+        proteins.push(new Protein(row.id, row.name));
+    })
 }
 
-export const addProtein = async (protein) => {
-    try {
-        await new Promise((resolve, reject) => {
-            db.run('INSERT INTO proteins (name) VALUES (?)', [protein.name], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.lastID);
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+export const addProtein = (protein) => {
+    const stmt = db.prepare('INSERT INTO PROTEINS (name) VALUES (?)');
+    stmt.run(protein.name);
 }
 
-export const deleteProtein = async (proteinId) => {
-    try {
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM proteins WHERE id = ?', [proteindId], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+export const deleteProtein = (id) => {
+   const stmt = db.prepare('DELETE FROM PROTEINS WHERE id=?');
+   stmt.run(id);
 }

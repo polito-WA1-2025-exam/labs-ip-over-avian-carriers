@@ -1,76 +1,24 @@
-import sqlite3 from 'sqlite3';
 import User from '../objects/User.js';
-
-
-const db = new sqlite3.Database('db.sqlite', (err) => {
-    if (err) {
-        console.error('Error opening database', err);
-    }
-}
-);
+import Database from 'better-sqlite3';
+const db = new Database('../db.sqlite');
+db.pragma('journal_mode = WAL');
 
 export const getUserByEmail = (email) => {
-    return new Promise((resolve, reject) => {
-        //get because we need only ONE user
-        db.get('SELECT * FROM USERS WHERE email = ?', [email], (err, row) => {
-            if (err) {
-                reject(err);
-            } else {
-                if (row) {
-                    const user = new User(row.email, row.name, row.surname, row.password);
-                    resolve(user);
-                } else {
-                    reject();
-                }
-            }
-        });
-    });
+    const row = db.prepare('SELECT * FROM USERS WHERE email = ?').get(email);
+    return new User(row.email, row.name, row.surname, row.password);
 };
 
 export const changePassword = (email, newPassword) => {
-    try {
-        return new Promise((resolve, reject) => {
-            db.run('UPDATE USERS SET password = ? WHERE email = ?', [newPassword, email], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+  const stmt = db.prepare('UPDATE USERS SET password = ? WHERE email = ?');
+  stmt.run(newPassword, email);
 }
 
 export const addUser = (user) => {
-    try {
-        return new Promise((resolve, reject) => {
-            db.run('INSERT INTO USERS (email, name, surname, password) VALUES (?, ?, ?, ?)', [user.email, user.name, user.surname, user.password], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.lastID);
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+   const stmt = db.prepare('INSERT INTO USERS (email, name, surname, password) VALUES (?, ?, ?, ?)');
+   stmt.run(user.email, user.name, user.surname, user.password); 
 }
 
 export const deleteUser = (email) => {
-    try {
-        return new Promise((resolve, reject) => {
-            db.run('DELETE FROM USERS WHERE email = ?', [email], (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+  const stmt = db.prepare('DELETE FROM USERS WHERE email = ?');
+  stmt.run(email);
 }

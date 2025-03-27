@@ -1,47 +1,26 @@
-import sqlite3 from 'sqlite3';
 import Ingredient from '../objects/Ingredient.js';
-const db = new sqlite3.Database('db.sqlite', (err) => {
-    if (err) {
-        console.error('Error opening database', err);
-    }
-});
+import Database from 'better-sqlite3';
+const db = new Database('../db.sqlite');
+db.pragma('journal_mode = WAL');
+
 
 export const listIngredients = () => {
-    return new Promise((resolve, reject) => {
-        db.all('SELECT * FROM ingredients', (err, rows) => {
-            if (err) {
-                reject();
-            } else {
-                const ingredients = [];
-                rows.forEach(row => {
-                    ingredients.push(new Ingredient(row.id, row.name));
-                });
-                resolve(ingredients);
-            }
-        });
+    const rows = db.prepare('SELECT * FROM INGREDIENTS').all();
+
+    const ingredients = [];
+    rows.forEach(row => {
+        ingredients.push(new Ingredient(row.id, row.name));
     });
+
+    return ingredients;
 }
 
 export const addIngredient = (ingredient) => {
-    return new Promise((resolve, reject) => {
-        db.run('INSERT INTO ingredients (name) VALUES (?)', [ingredient.name], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(this.lastID);
-            }
-        });
-    });
+    const stmt = db.prepare("INSERT INTO INGREDIENTS (name) VALUES (?)");
+    stmt.run(ingredient.name);
 }
 
-export const deleteIngredient = (ingredientId) => {
-    return new Promise((resolve, reject) => {
-        db.run('DELETE FROM ingredients WHERE id = ?', [ingredientId], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(this.changes);
-            }
-        });
-    });
+export const deleteIngredient = (id) => {
+    const stmt = db.prepare("DELETE FROM INGREDIENTS WHERE id = ?");
+    stmt.run(id);
 }
