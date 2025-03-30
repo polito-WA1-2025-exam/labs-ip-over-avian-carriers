@@ -1,118 +1,50 @@
-import sqlite3 from 'sqlite3';
 import PokeBowl from '../objects/PokeBowl.js';
 import Ingredient from '../objects/Ingredient.js';
 import Protein from '../objects/Protein.js';
+import Database from 'better-sqlite3';
+const db = new Database('../db.sqlite');
+db.pragma('journal_mode = WAL');
 
-const db = new sqlite3.Database('db.sqlite', (err) => {
-    if (err) {
-        console.error('Error opening database', err);
-    }
-});
 
-export const listOrderPokeBowls = (orderId) => {
+export const listOrderPokeBowls = (idOrder) => {
     const pokeBowls = [];
-    return new Promise((resolve, reject) => {
-        db.all('SELECT * FROM pokebowls WHERE idOrder = ?', [orderId], (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                rows.forEach(row => {
-                    pokeBowls.push(new PokeBowl(row.id, row.idSize, row.base, row.qty, row.idOrder));
-                });
-
-                pokeBowls.forEach(pokeBowl => async () => {
-                    pokeBowl.ingredients = await new Promise((resolve, reject) => {
-                        db.all('SELECT (id, name) FROM POKEBOWLS P, POKEBOWLS_INGREDIENTS PI, INGREDIENTS I WHERE P.id = PI.idPokeBowls AND I.id = PI.idIngredients AND P.id = ?', [pokeBowl.id], (err, rows) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve(rows);
-                            }
-                        });
-                    });
-                    rows.forEach(row => {
-                        pokeBowl.ingredients.push(new Ingredient(row.id, row.name));
-                    });
-
-
-                    pokeBowl.proteins = await new Promise((resolve, reject) => {
-                        db.all('SELECT (id, name) FROM POKEBOWLS PO, POKEBOWLS_PROTEINS PR, PROTEINS PRO WHERE PO.id = PR.idPokeBowls AND PRO.id = PR.idProteins AND P.id = ?', [pokeBowl.id], (err, rows) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve(rows);
-                            }
-                        });
-                    });
-                    rows.forEach(row => {
-                        pokeBowl.proteins.push(new Protein(row.id, row.name));
-                    });
-                });
-
-                resolve(rows);
-            }
-        });
+    const rows = db.prepare('SELECT * FROM pokebowls WHERE idOrder = ?').get(idOrder);
+    rows.forEach(row => {
+        pokeBowls.push(new PokeBowl(row.id, row.idSize, row.base, row.qty, row.idOrder));
     });
+
+    pokeBowls.forEach(pokeBowl => {
+        rows = db.prepare('SELECT (id, name) FROM POKEBOWLS P, POKEBOWLS_INGREDIENTS PI, INGREDIENTS I WHERE P.id = PI.idPokeBowls AND I.id = PI.idIngredients AND P.id = ?').get(pokeBowl);
+        rows.forEach(row => {
+            pokeBowl.ingredients.push(new Ingredient(row.id, row.name));
+        });
+
+        rows = db.prepare('SELECT (id, name) FROM POKEBOWLS PO, POKEBOWLS_PROTEINS PR, PROTEINS PRO WHERE PO.id = PR.idPokeBowls AND PRO.id = PR.idProteins AND P.id = ?').get(pokeBowl);
+        rows.forEach(row => {
+            pokeBowl.proteins.push(new Ingredient(row.id, row.name));
+        });
+
+        });
 }
 
 export const addPokeBowl = (pokeBowl) => {    
-        return new Promise((resolve, reject) => {
-            db.run('INSERT INTO pokebowls (idSize, base, qty, idOrder) VALUES (?, ?, ?, ?)', [pokeBowl.sizeId, pokeBowl.base, pokeBowl.qty, pokeBowl.orderId], function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    pokeBowl.ingredients.forEach(async (ingredient) => {
-                        try {
-                            await new Promise((resolve, reject) => {
-                                db.run('INSERT INTO pokebowls_ingredients (idPokeBowls, idIngredients) VALUES (?, ?)', [pokeBowl.id, ingredient.id], function (err) {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        resolve(this.lastID);
-                                    }
-                                });
-                            });
-                        } catch (err) {
-                            throw err;
-                        }
-                    });
+    const stmt = db.prepare('INSERT INTO pokebowls (idSize, base, qty, idOrder) VALUES (?, ?, ?, ?)')
+    stmt.run(pokeBowl.sizeId, pokeBowl.base, pokeBowl.qty, pokeBowl.orderId)
+        
+    pokeBowl.ingredients.forEach(ingredient => {
+        stmt = db.prepare('INSERT INTO pokebowls_ingredients (idPokeBowls, idIngredients) VALUES (?, ?)')
+        stmt.run(pokeBowl.id, ingredient.id)
+    });
                 
-                    pokeBowl.proteins.forEach(async (protein) => {
-                        try {
-                            await new Promise((resolve, reject) => {
-                                db.run('INSERT INTO pokebowls_proteins (idPokeBowls, idProteins) VALUES (?, ?)', [pokeBowl.id, protein.id], function (err) {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        resolve(this.lastID);
-                                    }
-                                });
-                            });
-                        } catch (err) {
-                            throw err;
-                        }
-                    });
-
-                    resolve(this.lastID);
-                }
-            });
-        });
+    pokeBowl.proteins.forEach(async (protein) => {
+        stmt = db.prepare('INSERT INTO pokebowls_proteins (idPokeBowls, idProteins) VALUES (?, ?)')
+        stmt.run(pokeBowl.id, protein.id);
+    });
 }
 
 export const deletePokeBowl = async (pokeBowlId) => {
-    try {
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM pokebowls WHERE id = ?', [pokeBowlId], function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
-        });
-    } catch (err) {
-        throw err;
-    }
+    const stmt = db.prepare('DELETE FROM pokebowls WHERE id = ?');
+    stmt.run(pokeBowlId);
 }
 
 /*
