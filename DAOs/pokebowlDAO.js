@@ -8,7 +8,7 @@ db.pragma('journal_mode = WAL');
 
 export const listOrderPokeBowls = (idOrder) => {
     const pokeBowls = [];
-    const rows = db.prepare('SELECT * FROM pokebowls WHERE idOrder = ?').get(idOrder);
+    const rows = db.prepare('SELECT * FROM POKEBOWLS WHERE idOrder = ?').get(idOrder);
     rows.forEach(row => {
         pokeBowls.push(new PokeBowl(row.id, row.idSize, row.base, row.qty, row.idOrder));
     });
@@ -28,45 +28,27 @@ export const listOrderPokeBowls = (idOrder) => {
 }
 
 export const addPokeBowl = (pokeBowl) => {    
-    const stmt = db.prepare('INSERT INTO pokebowls (idSize, base, qty, idOrder) VALUES (?, ?, ?, ?)')
+    const stmt = db.prepare('INSERT INTO POKEBOWLS (idSize, base, qty, idOrder) VALUES (?, ?, ?, ?)')
     stmt.run(pokeBowl.sizeId, pokeBowl.base, pokeBowl.qty, pokeBowl.orderId)
         
     pokeBowl.ingredients.forEach(ingredient => {
-        stmt = db.prepare('INSERT INTO pokebowls_ingredients (idPokeBowls, idIngredients) VALUES (?, ?)')
+        stmt = db.prepare('INSERT INTO POKEBOWLS_INGREDIENTS (idPokeBowls, idIngredients) VALUES (?, ?)')
         stmt.run(pokeBowl.id, ingredient.id)
     });
                 
     pokeBowl.proteins.forEach(async (protein) => {
-        stmt = db.prepare('INSERT INTO pokebowls_proteins (idPokeBowls, idProteins) VALUES (?, ?)')
+        stmt = db.prepare('INSERT INTO POKEBOWLS_PROTEINS (idPokeBowls, idProteins) VALUES (?, ?)')
         stmt.run(pokeBowl.id, protein.id);
     });
 }
 
 export const deletePokeBowl = async (pokeBowlId) => {
-    const stmt = db.prepare('DELETE FROM pokebowls WHERE id = ?');
+    const stmt = db.prepare('DELETE FROM POKEBOWLS WHERE id = ?');
+    stmt.run(pokeBowlId);
+    stmt = db.prepare('DELETE FROM POKEBOWLS_INGREDIENTS WHERE idPokeBowls = ?');
+    stmt.run(pokeBowlId);
+    stmt = db.prepare('DELETE FROM POKEBOWLS_PROTEINS WHERE idPokeBowls = ?');
     stmt.run(pokeBowlId);
 }
 
-/*
 
-Irrelevant. The user decides wheter or not to modify his bowls through UI.
-Once the users has decided to purchase the bowls and has sent the order via app,
-in the db are stored the bowls with the order.
-So it is not needed to have a query that updates the bowls.
-
-export const updatePokeBowl = async (pokeBowl) => {
-    try{
-        await new Promise((resolve, reject) => {
-            db.run('UPDATE pokebowls SET idSize = ?, base = ?, qty = ?, idOrder = ? WHERE id = ?', [pokeBowl.sizeId, pokeBowl.base, pokeBowl.qty, pokeBowl.orderId, pokeBowl.id], function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(this.changes);
-                }
-            });
-        });
-    }catch (err) {
-        throw err;
-    }
-};
-*/
