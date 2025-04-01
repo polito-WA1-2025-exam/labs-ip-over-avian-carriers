@@ -18,6 +18,8 @@
   "homepage": "https://github.com/polito-WA1-2025-exam/labs-ip-over-avian-carriers#readme",
   "type": "module",
   "dependencies": {
+    "better-sqlite3": "^11.9.1",
+    "express": "^5.1.0",
     "sqlite3": "^5.1.7"
   }
 }

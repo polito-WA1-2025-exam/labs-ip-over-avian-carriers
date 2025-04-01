@@ -1,22 +1,16 @@
-export default class Order{
-    constructor(orderId, totalPrice, notes, userId) {
-        this.orderId = orderId;
-        this.listPokeBowl = [];
-        this.totalPrice = totalPrice;
-        this.notes = notes;
-        this.userId = userId;
+import { addOrder } from "../DAOs/orderDAO.js";
 
-        function addPokeBowl(pokeBowl) {
-            this.listPokeBowl.push(pokeBowl);
-        }
+export default class Order {
+  constructor(totalPrice, notes, userId, orderId) {
+    this.listPokeBowl = [];
+    this.totalPrice = totalPrice;
+    this.notes = notes;
+    this.userId = userId;
+
+    if (orderId == null) {
+      this.orderId = addOrder(this);
+    } else {
+      this.orderId = orderId;
     }
+  }
 }
-
-function Orders() {
-    this.listOrders = [];
-
-    this.addOrder = (order) => {
-        this.listOrders.push(order);
-    }
-}
-

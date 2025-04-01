@@ -1,34 +1,31 @@
 import Order from "../objects/Order.js";
 import Database from "better-sqlite3";
-const db = new Database("../db.sqlite");
+import PokeBowl from "../objects/PokeBowl.js";
+import { listOrderPokeBowls } from "./pokebowlDAO.js";
+const db = new Database("db.sqlite");
 db.pragma("journal_mode = WAL");
 
-
-export const listUserOrders = (id) => {
-
-  let rows = db.prepare("SELECT * FROM ORDERS WHERE id = ?").all(id);
+export const listUserOrders = (userId) => {
+  let rows = db.prepare("SELECT * FROM ORDERS WHERE idUser = ?").all(userId);
 
   const orders = [];
   rows.forEach(row => {
-    orders.push(new Order(row.id, row.totalPrice, row.notes, row.idUser));
+    orders.push(new Order(row.totalPrice, row.notes, row.idUser, row.id));
   });
 
   orders.forEach(order => {
-    const ro = db.prepare('SELECT * FROM POKEBOWLS WHERE idOrder = ?').all(order.id);
-    ro.forEach(row => {
-      order.addPokeBowl(new PokeBowl(row.id, row.idSize, row.base, row.qty, idOrder));
-    });
-  })
+    order.listPokeBowl = listOrderPokeBowls(order.orderId);
+  });
   
   return orders;
 };
 
 export const addOrder = (order) => {
     const stmt = db.prepare("INSERT INTO ORDERS (totalPrice, notes, idUser) VALUES (?, ?, ?)");
-    stmt.run(order.totalPrice, order.notes, order.userId);
+    return stmt.run(order.totalPrice, order.notes, order.userId).lastInsertRowid;
 };
 
-export const deleteOrder = (idUser) => {
-  const stmt = db.prepare("DELETE FROM ORDERS WHERE idUser = ?");
-  stmt.run(idUser);
+export const deleteOrder = (orderId) => {
+  const stmt = db.prepare("DELETE FROM ORDERS WHERE idOrder = ?");
+  stmt.run(orderId);
 };

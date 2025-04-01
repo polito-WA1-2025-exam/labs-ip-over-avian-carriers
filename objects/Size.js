@@ -1,18 +1,15 @@
+import { addSize } from "../DAOs/sizeDAO.js";
+
 export default class Size {
-    constructor(sizeId, maxDayQty, maxProteins, maxIngridients, price) {
-        this.sizeId = sizeId;
-        this.maxDayQty = maxDayQty;
-        this.maxProteins = maxProteins;
-        this.maxIngridients = maxIngridients;
-        this.price = price;
+  constructor(maxDayQty, maxProteins, maxIngredients, price, id) {
+    this.maxDayQty = maxDayQty;
+    this.maxProteins = maxProteins;
+    this.maxIngredients = maxIngredients;
+    this.price = price;
+    if (id == null) {
+      this.sizeId = addSize(this);
+    } else {
+      this.sizeId = id;
     }
+  }
 }
-
-function Sizes() {
-    this.listSizes = [];
-
-    this.addSize = (size) => {
-        this.listSizes.push(size);
-    }
-}
-

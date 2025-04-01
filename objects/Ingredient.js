@@ -1,6 +1,12 @@
+import { addIngredient } from "../DAOs/ingredientDAO.js";
+
 export default class Ingredient {
-    constructor(ingredientId, name) {
-        this.ingredientId = ingredientId;
-        this.name = name;
+  constructor(name, id = null) {
+    this.name = name;
+    if (id == null) {
+      this.ingredientId = addIngredient(name);
+    } else {
+      this.ingredientId = id;
     }
+  }
 }

@@ -82,3 +82,38 @@
 | totalPrice | REAL     |
 | notes      | TEXT     |
 | idUser     | TEXT, FK USER Table |
+
+
+## Queries
+### user
+- getUserByEmail (email) ✅
+- changePassword (email, password) ✅
+- addUser (user) ✅
+- deleteUser (email) ✅
+
+### pokebowl
+- listOrderPokeBowls (orderId) ✅
+- addPokeBowl (pokeBowl) ✅
+- deletePokeBowl (pokeBowlId) ✅
+
+### ingredient
+- listIngredients () ✅
+- addIngredient (name) ✅
+- deleteIngredient (id) ✅
+
+### protein
+- listProteins () ✅
+- addProtein (name) ✅
+- deleteProtein (id) ✅
+
+### size
+- listSizes () ✅
+- getSizeById (id) ✅
+- addSize (size) ✅
+- deleteSize (id) ✅
+- updateQty (id, maxQty) ✅
+
+### order
+- listUserOrders (orderId)
+- deleteOrder (orderId)
+- addOrder (order)
