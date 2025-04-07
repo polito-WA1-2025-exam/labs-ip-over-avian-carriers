@@ -26,6 +26,6 @@ export const addOrder = (order) => {
 };
 
 export const deleteOrder = (orderId) => {
-  const stmt = db.prepare("DELETE FROM ORDERS WHERE idOrder = ?");
+  const stmt = db.prepare("DELETE FROM ORDERS WHERE id = ?");
   stmt.run(orderId);
 };

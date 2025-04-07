@@ -22,3 +22,17 @@ DELETE http://localhost:3000/user/example@mail.com
 
 # Routes su user testate e funzionano correttamente
 # unica cosa testate con curl perchè dal file .http non funzionano
+
+curl -X GET http://localhost:3000/orders/prova@mail.com
+
+curl -X POST http://localhost:3000/orders \
+-H "Content-Type: application/json" \
+-d '{
+  "totalPrice": 50.99,
+  "notes": "Please deliver between 6-7 PM",
+  "userId": "prova@mail.com"
+}'
+
+curl -X DELETE http://localhost:3000/orders/17
+
+# Routes su orders testate e funzionano correttamente
