@@ -1,6 +1,6 @@
 import Size from "../objects/Size.js";
 import Database from "better-sqlite3";
-const db = new Database("db.sqlite");
+const db = new Database("../db.sqlite");
 db.pragma("journal_mode = WAL");
 
 export const listSizes = () => {

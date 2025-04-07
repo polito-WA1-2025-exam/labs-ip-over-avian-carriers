@@ -2,7 +2,7 @@ import PokeBowl from "../objects/PokeBowl.js";
 import Ingredient from "../objects/Ingredient.js";
 import Protein from "../objects/Protein.js";
 import Database from "better-sqlite3";
-const db = new Database("db.sqlite");
+const db = new Database("../db.sqlite");
 db.pragma("journal_mode = WAL");
 
 export const listOrderPokeBowls = (idOrder) => {

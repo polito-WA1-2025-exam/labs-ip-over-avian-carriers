@@ -2,7 +2,7 @@ import Order from "../objects/Order.js";
 import Database from "better-sqlite3";
 import PokeBowl from "../objects/PokeBowl.js";
 import { listOrderPokeBowls } from "./pokebowlDAO.js";
-const db = new Database("db.sqlite");
+const db = new Database("../db.sqlite");
 db.pragma("journal_mode = WAL");
 
 export const listUserOrders = (userId) => {

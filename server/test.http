@@ -1,0 +1,24 @@
+GET http://localhost:3000/user/prova@mail.com
+
+PATCH http://localhost:3000/user/updatePassword
+Content-Type: application/json
+{
+  "email": "prova1@mail.com",
+  "password": "newPassword123"
+}
+
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+  "email": "example@mail.com",
+  "name": "John",
+  "surname": "Doe",
+  "password": "securePassword123"
+}
+
+DELETE http://localhost:3000/user/example@mail.com
+
+
+# Routes su user testate e funzionano correttamente
+# unica cosa testate con curl perchè dal file .http non funzionano
