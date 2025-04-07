@@ -15,14 +15,15 @@ app.get('/user/:email', (req, res)=>{
     res.json(user);
 });
 
-app.patch('/user/updatePassword', (req, res) => {
-    const { email, password } = req.body;
-    console.log(email, password);
+app.patch('/user/:email', (req, res) => {
+    const email = req.params.email;
+    const password = req.body.password;
+    //console.log(email, password);
     changePassword(email, password);
     res.status(200).end();
 });
 
-app.post('/user', (req, res) => {
+app.put('/user', (req, res) => {
     const { email, name, surname, password } = req.body;
     //console.log(email, name, surname, password);
     const user = { email, name, surname, password };
