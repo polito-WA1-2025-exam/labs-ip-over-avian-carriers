@@ -1,38 +1,131 @@
 GET http://localhost:3000/user/prova@mail.com
 
-PATCH http://localhost:3000/user/updatePassword
-Content-Type: application/json
+###
+
+PATCH http://localhost:3000/user/prova1@mail.com
+content-type: application/json
+
 {
-  "email": "prova1@mail.com",
   "password": "newPassword123"
 }
 
-POST http://localhost:3000/user
-Content-Type: application/json
+###
+
+POST http://localhost:3000/user/prova@mail.com
+content-type: application/json
 
 {
-  "email": "example@mail.com",
   "name": "John",
   "surname": "Doe",
   "password": "securePassword123"
 }
 
-DELETE http://localhost:3000/user/example@mail.com
+###
 
+DELETE http://localhost:3000/user/aaaaa@mail.com
 
-# Routes su user testate e funzionano correttamente
-# unica cosa testate con curl perchè dal file .http non funzionano
+###
 
-curl -X GET http://localhost:3000/orders/prova@mail.com
+GET http://localhost:3000/orders/prova@mail.com
 
-curl -X POST http://localhost:3000/orders \
--H "Content-Type: application/json" \
--d '{
+###
+
+POST http://localhost:3000/orders/prova@mail.com
+content-type: application/json
+
+{
   "totalPrice": 50.99,
-  "notes": "Please deliver between 6-7 PM",
-  "userId": "prova@mail.com"
-}'
+  "notes": "Please deliver between 6-7 PM"
+}
 
-curl -X DELETE http://localhost:3000/orders/17
+###
 
-# Routes su orders testate e funzionano correttamente
+DELETE http://localhost:3000/orders/17
+
+###
+
+GET http://localhost:3000/proteins
+
+###
+
+POST http://localhost:3000/proteins
+content-type: application/json
+
+{
+  "name": "new Protein"
+}
+
+###
+
+DELETE http://localhost:3000/proteins/15
+
+###
+
+GET http://localhost:3000/ingredients
+
+###
+
+POST http://localhost:3000/ingredients
+content-type: application/json
+
+{
+  "name": "new Ingredient"
+}
+
+###
+
+DELETE http://localhost:3000/ingredients/12
+
+###
+
+GET http://localhost:3000/sizes
+
+###
+
+GET http://localhost:3000/sizes/1
+
+###
+
+POST http://localhost:3000/sizes
+content-type: application/json
+
+{
+  "maxDayQty": 5,
+  "maxProteins": 3,
+  "maxIngredients": 5,
+  "price": 2
+}
+
+###
+
+DELETE http://localhost:3000/sizes/17
+
+###
+
+PATCH http://localhost:3000/sizes/17
+content-type: application/json
+
+{
+  "maxDayQty": 10
+}
+
+###
+
+GET http://localhost:3000/pokebowls/1
+
+###
+
+POST http://localhost:3000/pokebowls/1
+content-type: application/json
+
+{
+  "sizeId": 1,
+  "base": 1,
+  "qty": 1
+}
+
+###
+
+DELETE http://localhost:3000/pokebowls/11
+
+###

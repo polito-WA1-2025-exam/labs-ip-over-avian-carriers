@@ -10,6 +10,7 @@ export const listProteins = () => {
   rows.forEach((row) => {
     proteins.push(new Protein(row.name, row.id));
   });
+  return proteins;
 };
 
 export const addProtein = (proteinName) => {

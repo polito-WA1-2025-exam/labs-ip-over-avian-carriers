@@ -114,6 +114,7 @@
 - updateQty (id, maxQty) ✅
 
 ### order
-- listUserOrders (orderId)
-- deleteOrder (orderId)
-- addOrder (order)
+- listUserOrders (orderId) ✅
+- deleteOrder (orderId) ✅
+- addOrder (order) ✅
+

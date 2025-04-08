@@ -50,6 +50,8 @@ export const addPokeBowl = (pokeBowl) => {
     pokeBowl.orderId
   ).lastInsertRowid;
   pokeBowl.pokeBowlId = id;
+  
+  return id;
 };
 
 export const deletePokeBowl = (pokeBowlId) => {
