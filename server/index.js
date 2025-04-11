@@ -1,12 +1,12 @@
 import express from 'express';
 import morgan from 'morgan';
 import { ExpressValidator } from 'express-validator';
-import { getUserByEmail, changePassword, addUser, deleteUser } from '../DAOs/userDAO.js';
-import { listUserOrders, addOrder, deleteOrder } from '../DAOs/orderDAO.js';
-import { listProteins, addProtein, deleteProtein } from '../DAOs/proteinDAO.js';
-import { listIngredients, addIngredient, deleteIngredient } from '../DAOs/ingredientDAO.js';
-import { listSizes, getSizeById, addSize, deleteSize, updateQty } from '../DAOs/sizeDAO.js';
-import { listOrderPokeBowls, addPokeBowl, deletePokeBowl } from '../DAOs/pokebowlDAO.js';
+import { getUserByEmail, changePassword, addUser, deleteUser } from './DAOs/userDAO.js';
+import { listUserOrders, addOrder, deleteOrder } from './DAOs/orderDAO.js';
+import { listProteins, addProtein, deleteProtein } from './DAOs/proteinDAO.js';
+import { listIngredients, addIngredient, deleteIngredient } from './DAOs/ingredientDAO.js';
+import { listSizes, getSizeById, addSize, deleteSize, updateQty } from './DAOs/sizeDAO.js';
+import { listOrderPokeBowls, addPokeBowl, deletePokeBowl } from './DAOs/pokebowlDAO.js';
 const app = express();
 
 app.use(morgan('dev'));
@@ -163,4 +163,4 @@ app.delete('/pokebowls/:id', (req, res) => {
 });
 
 
-app.listen(3000, ()=>console.log("server started"));
+app.listen(3000, ()=>console.log("server started on port 3000"));
