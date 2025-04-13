@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bootstrap": "^5.3.5",
+    "crypto-browserify": "^3.12.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-app-polyfill": "^3.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
