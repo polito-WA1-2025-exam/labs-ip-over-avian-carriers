@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-function PokeSizeAvailability({size}) {
+function PokeSizeAvailability({onNext, size}) {
   return (
     <Card style={{ width: '15rem' }}>
       <Card.Img variant="top" src={`../../assets/imgs/${size.sizeName}.png`}/>
@@ -15,7 +15,7 @@ function PokeSizeAvailability({size}) {
             <p>€{size.price}</p>
           </div>
         </Card.Text>
-        <Button variant="primary">Select</Button>
+        <Button variant="primary" onClick={onNext}>Next</Button>
       </Card.Body>
     </Card>
   );
