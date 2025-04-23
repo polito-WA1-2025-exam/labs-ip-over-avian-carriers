@@ -13,15 +13,15 @@ export default function NavHeader() {
         <Container>
           <Navbar.Brand><Image src={logo} thumbnail fluid width={80} height={75}/></Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link><NavLink to="/" className={({ isActive }) =>
+            <NavLink to="/" className={({ isActive }) =>
                                 isActive ? "nav-link active-link" : "nav-link"
-                            }>Home</NavLink></Nav.Link>
-            <Nav.Link><NavLink to="/menu" className={({ isActive }) =>
+                            }>Home</NavLink>
+            <NavLink to="/menu" className={({ isActive }) =>
                                 isActive ? "nav-link active-link" : "nav-link"
-                            }>Menu</NavLink></Nav.Link>
-            <Nav.Link><NavLink to="/cart" className={({ isActive }) =>
+                            }>Menu</NavLink>
+            <NavLink to="/cart" className={({ isActive }) =>
                                 isActive ? "nav-link active-link" : "nav-link"
-                            }>Cart</NavLink></Nav.Link>
+                            }>Cart</NavLink>
           </Nav>
           <NavLink to="/profile">
             <CgProfile size={30} color="white" />
