@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Image from 'react-bootstrap/Image';
-import logo from '../assets/logo.png';
+import logo from '/assets/imgs/logo.png';
 import { CgProfile } from "react-icons/cg";
 import { NavLink } from 'react-router';
 

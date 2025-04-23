@@ -1,0 +1,15 @@
+.poke-size-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+.nLeft{
+  color: firebrick;
+  font-style: italic;
+  text-decoration-line: underline;
+}
+
+.totalPrice{
+  text-align: right;
+  color:grey
+}
