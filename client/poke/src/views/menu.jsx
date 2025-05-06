@@ -81,7 +81,7 @@ export default function Menu() {
                             <ListGroupItem>Avocado</ListGroupItem>
                             <ListGroupItem>Ananas</ListGroupItem>
                             <ListGroupItem>Cashew nuts</ListGroupItem>
-                            <ListGroupItem>kale</ListGroupItem>
+                            <ListGroupItem>Kale</ListGroupItem>
                             <ListGroupItem>Mango</ListGroupItem>
                             <ListGroupItem>Peppers</ListGroupItem>
                             <ListGroupItem>Corn</ListGroupItem>
