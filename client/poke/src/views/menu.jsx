@@ -8,13 +8,45 @@ import { PiBowlFood } from "react-icons/pi";
 import { FaBowlRice } from "react-icons/fa6";
 import { IoFishSharp } from "react-icons/io5";
 import { GiAvocado } from "react-icons/gi";
-
+import { getProteins, getIngredients } from '../../APIs/API';
+import { useState, useEffect} from 'react';
 
 export default function Menu() {
+
+    const [proteins, setProteins] = useState([]);
+    const [ingredients, setIngredients] = useState([]);
+    const [isLoading, setIsLoading] = useState('true');
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // Fetch proteins
+          const proteinsData = await getProteins();
+          setProteins(proteinsData);
+    
+          // Fetch ingredients
+          const ingredientsData = await getIngredients();
+          setIngredients(ingredientsData);
+
+          // fetch of availability TO-DO
+
+          setIsLoading(false);
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+    
+      fetchData(); // Call the async function
+    },[]); // Empty dependency array ensures this runs only once
+
+
     return (
         <Container className='mt-5'>
             <h1>Menu</h1>
             <p>In this page you can check poke bowl's availability and which bases, proteins and ingredients are available!</p>
+            { isLoading ? (<Container><div>Loading...</div> </Container>) : (
+            <>
             <Container>
             <div className="d-flex align-items-center justify-content-start gap-3 mb-3">
                 <PiBowlFood size={50} />
@@ -62,37 +94,31 @@ export default function Menu() {
                         <div className='d-flex align-items-center justify-content-start gap-3 mb-2'><FaBowlRice size={20}/><h2>Bases</h2></div>
                         <ListGroup>
                             <ListGroupItem>Rice</ListGroupItem>
-                            <ListGroupItem>Black rice</ListGroupItem>
+                            <ListGroupItem>Black Rice</ListGroupItem>
                             <ListGroupItem>Salad</ListGroupItem>
                         </ListGroup>
                     </Col>
                     <Col>
                         <div className='d-flex align-items-center justify-content-start gap-3 mb-2'><IoFishSharp size={20} /><h2>Proteins</h2></div>
                         <ListGroup>
-                            <ListGroupItem>Tuna</ListGroupItem>
-                            <ListGroupItem>Chicken</ListGroupItem>
-                            <ListGroupItem>Salmon</ListGroupItem>
-                            <ListGroupItem>Tofu</ListGroupItem>
+                            {proteins.map((p, index) => (
+                              <ListGroupItem key={index}>{p.name}</ListGroupItem>
+                            ))}
                         </ListGroup>
                     </Col>
                     <Col>
                         <div className='d-flex align-items-center justify-content-start gap-3 mb-2'><GiAvocado size={20} /><h2>Ingredients</h2></div>
                         <ListGroup>
-                            <ListGroupItem>Avocado</ListGroupItem>
-                            <ListGroupItem>Ananas</ListGroupItem>
-                            <ListGroupItem>Cashew nuts</ListGroupItem>
-                            <ListGroupItem>Kale</ListGroupItem>
-                            <ListGroupItem>Mango</ListGroupItem>
-                            <ListGroupItem>Peppers</ListGroupItem>
-                            <ListGroupItem>Corn</ListGroupItem>
-                            <ListGroupItem>Wakame</ListGroupItem>
-                            <ListGroupItem>Tomatoes</ListGroupItem>
-                            <ListGroupItem>Carrot</ListGroupItem>
-                            <ListGroupItem>Salad</ListGroupItem>
+                            {ingredients.map((i, index) => (
+                                <ListGroupItem key={index}>{i.name}</ListGroupItem>
+                            ))}
                         </ListGroup>
                     </Col>
                 </Row>
             </Container>
+            </>
+            )}
+
         </Container>
     )
 }

@@ -20,6 +20,7 @@
   "dependencies": {
     "better-sqlite3": "^11.9.1",
     "bootstrap": "^5.3.5",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "morgan": "^1.10.0",

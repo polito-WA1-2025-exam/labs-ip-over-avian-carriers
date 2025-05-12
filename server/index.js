@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import { ExpressValidator } from 'express-validator';
 import { getUserByEmail, changePassword, addUser, deleteUser } from './DAOs/userDAO.js';
 import { listUserOrders, addOrder, deleteOrder } from './DAOs/orderDAO.js';
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res)=>res.send("Hello"));
 
