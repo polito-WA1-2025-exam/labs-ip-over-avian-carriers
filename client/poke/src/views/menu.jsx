@@ -8,14 +8,15 @@ import { PiBowlFood } from "react-icons/pi";
 import { FaBowlRice } from "react-icons/fa6";
 import { IoFishSharp } from "react-icons/io5";
 import { GiAvocado } from "react-icons/gi";
-import { getProteins, getIngredients } from '../../APIs/API';
+import { getProteins, getIngredients, getSizes } from '../../APIs/API';
 import { useState, useEffect} from 'react';
 
 export default function Menu() {
 
     const [proteins, setProteins] = useState([]);
     const [ingredients, setIngredients] = useState([]);
-    const [isLoading, setIsLoading] = useState('true');
+    const [bowlsSizeAvailability, setBowlsSizeAvailability ] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -28,7 +29,8 @@ export default function Menu() {
           const ingredientsData = await getIngredients();
           setIngredients(ingredientsData);
 
-          // fetch of availability TO-DO
+          const bowlsSizes = await getSizes();
+          setBowlsSizeAvailability(bowlsSizes);
 
           setIsLoading(false);
 
@@ -53,39 +55,33 @@ export default function Menu() {
                 <h2 className="mb-0">Poke Bowl's availability</h2>
             </div>
                 <ListGroup as="ol" numbered>
+                  {bowlsSizeAvailability.map((bowl, index) => (
                     <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-start">
-                        <div className="ms-2 me-auto">
-                            <div className="fw-bold">Poke bowl</div>
-                            Regular
+                      as="li"
+                      key={index}
+                      className="d-flex justify-content-between align-items-start"
+                    >
+                      <div className="ms-2 me-auto">
+                        <div className="fw-bold">
+                          {bowl.sizeId === 0
+                            ? 'Poke Bowl - Regular'
+                            : bowl.sizeId === 1
+                            ? 'Poke Bowl - Medium'
+                            : 'Poke Bowl - Large'} from {bowl.price} €
                         </div>
-                        <Badge bg="primary" pill>
-                            14
-                        </Badge>
+                        <p className="mb-0">
+                          {bowl.sizeId === 0
+                            ? 'Regular bowls include one protein and up to 4 ingredients (minimum 1, optionally repeated).'
+                            : bowl.sizeId === 1
+                            ? 'Medium bowls include two proteins and up to 4 ingredients (minimum 1, optionally repeated).'
+                            : 'Large bowls include three proteins and up to 6 ingredients (minimum 1, optionally repeated).'}
+                        </p>
+                      </div>
+                      <Badge bg="primary" pill>
+                        {bowl.maxDayQty}
+                      </Badge>
                     </ListGroup.Item>
-                    <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-start">
-                        <div className="ms-2 me-auto">
-                            <div className="fw-bold">Poke bowl</div>
-                            Medium
-                        </div>
-                        <Badge bg="primary" pill>
-                            14
-                        </Badge>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                        as="li"
-                        className="d-flex justify-content-between align-items-start">
-                        <div className="ms-2 me-auto">
-                            <div className="fw-bold">Poke bowl</div>
-                            Large
-                        </div>
-                        <Badge bg="primary" pill>
-                            14
-                        </Badge>
-                    </ListGroup.Item>
+                  ))}
                 </ListGroup>
             </Container>
             <Container className='mt-5 mb-5'>
