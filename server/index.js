@@ -1,22 +1,103 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import { ExpressValidator } from 'express-validator';
-import { getUserByEmail, changePassword, addUser, deleteUser } from './DAOs/userDAO.js';
+import passport from 'passport';
+import session from 'express-session';
+import LocalStrategy from 'passport-local';
+//import { ExpressValidator } from 'express-validator';
 import { listUserOrders, addOrder, deleteOrder } from './DAOs/orderDAO.js';
 import { listProteins, addProtein, deleteProtein } from './DAOs/proteinDAO.js';
 import { listIngredients, addIngredient, deleteIngredient } from './DAOs/ingredientDAO.js';
 import { listSizes, getSizeById, addSize, deleteSize, updateQty } from './DAOs/sizeDAO.js';
 import { listOrderPokeBowls, addPokeBowl, deletePokeBowl } from './DAOs/pokebowlDAO.js';
+import { getUser, getUserByEmail } from './DAOs/userDAO.js';
 const app = express();
 
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(cors());
 
-app.get('/', (req, res)=>res.send("Hello"));
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
 
-//#region USERS
+/*** Set up Passport ***/
+// set up the "username and password" login strategy
+// by setting a function to verify username and password
+passport.use(new LocalStrategy(
+    async function(username, password, done) {
+     const user =  await getUser(username, password);
+     if(user){
+        return done(null, user);
+     } else {
+        return done(null, false, { message: 'Incorrect username or password.' });
+     }
+    }
+));
+  
+  // serialize and de-serialize the user (user object <-> session)
+  // we serialize only the user id and store it in the session
+passport.serializeUser((user, done) => {
+  done(null, user.email); // Store only the user's email in the session
+});
+  
+  // starting from the data in the session, we extract the current (logged-in) user
+passport.deserializeUser((email, done) => {
+    const user = getUserByEmail(email);
+    if(user){
+        return done(null, user);
+    } else {
+        done(new Error('User not found during deserialization'));
+    }
+
+});
+  
+  // custom middleware: check if a given request is coming from an authenticated user
+const isLoggedIn = (req, res, next) => {
+    if(req.isAuthenticated())
+      return next();
+    
+    return res.status(401).json({ error: 'Not authenticated'});
+}
+  
+  // set up the session
+app.use(session({
+    // by default, Passport uses a MemoryStore to keep track of the sessions
+    secret: 'hkfc674cxdkytvdfs09',   // change this random string, should be a secret value
+    resave: false,
+    saveUninitialized: false
+}));
+  
+// then, init passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.post('/sessions', function(req, res, next) {
+    passport.authenticate('local', (err, user, info) => {
+      if (err)
+        return next(err);
+        if (!user) {
+          // display wrong login messages
+          return res.status(401).json(info);
+        }
+        // success, perform the login
+        req.login(user, (err) => {
+          if (err)
+            return next(err);
+          
+          // req.user contains the authenticated user, we send all the user info back
+          // this is coming from userDao.getUser()
+          return res.json(req.user);
+        });
+    })(req, res, next);
+  });
+
+app.delete('/sessions/current', (req, res) => {
+    req.logout( ()=> { res.end(); } );
+  });  
+
+/*#region USERS - The Old APIs related to managing users
 app.get('/user/:email', (req, res)=>{
     const email = req.params.email;
     //console.log(email);
@@ -46,17 +127,17 @@ app.delete('/user/:email', (req, res) => {
     deleteUser(email);
     res.status(200).end();
 });
-//#endregion
+//#endregion*/
 
 //#region ORDERS
-app.get('/orders/:email', (req, res) => {
+app.get('/orders/:email', isLoggedIn, (req, res) => {
     const email = req.params.email;
     //console.log(userId);
     const orders = listUserOrders(email);
     res.json(orders);
 });
 
-app.post('/orders/:email', (req, res) => {
+app.post('/orders/:email', isLoggedIn, (req, res) => {
     const { totalPrice, notes } = req.body;
     const userId = req.params.email;
     //console.log(totalPrice, notes, userId);
@@ -65,7 +146,7 @@ app.post('/orders/:email', (req, res) => {
     res.json( orderId );
 });
 
-app.delete('/orders/:orderId', (req, res) => {
+app.delete('/orders/:orderId', isLoggedIn, (req, res) => {
     const orderId = req.params.orderId;
     //console.log(orderId);
     deleteOrder(orderId);
@@ -144,13 +225,13 @@ app.patch('/sizes/:id', (req, res) => {
 });
 //#endregion
 
-app.get('/pokebowls/:idOrder', (req, res) => {
+app.get('/pokebowls/:idOrder', isLoggedIn, (req, res) => {
     const idOrder = req.params.idOrder;
     const pokebowls = listOrderPokeBowls(idOrder);
     res.json(pokebowls);
 })
 
-app.post('/pokebowls/:orderId', (req, res) => {
+app.post('/pokebowls/:orderId', isLoggedIn, (req, res) => {
     const {sizeId, base, qty} = req.body;
     const orderId = req.params.orderId;
     const pokeBowl = {sizeId, base, qty, orderId};
@@ -158,7 +239,7 @@ app.post('/pokebowls/:orderId', (req, res) => {
     res.json({id});
 });
 
-app.delete('/pokebowls/:id', (req, res) => {
+app.delete('/pokebowls/:id', isLoggedIn, (req, res) => {
     const id = req.params.id;
     deletePokeBowl(id);
     res.status(200).end();
