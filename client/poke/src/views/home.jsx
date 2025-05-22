@@ -13,7 +13,7 @@ export default function Home() {
             <p className='fst-italic'> From the freshest seafood to legendary toppings and house-made sauces, every poke bowl is crafted to rule your tastebuds. Your journey to the perfect bowl starts here.<br></br>
                 Choose one of our signature creations or forge your own path with fully customizable ingredients. One bowl to rule them all 
                 and it's made just for you.</p>
-            <Button variant="dark" size="md"><NavLink to="/register" className="text-white text-decoration-none"> Start your quest now!</NavLink></Button>    
+            <Button variant="dark" size="md"><NavLink to="/login" className="text-white text-decoration-none"> Start your quest now!</NavLink></Button>    
             </Container>
     )
 }

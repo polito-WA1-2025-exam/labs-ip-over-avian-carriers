@@ -5,16 +5,14 @@ import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import { getUserOrders } from '../../APIs/API';
+import { getUserOrders, logoutUser } from '../../APIs/API';
+import { useUser } from '../contexts/UserContext';
+import { useNavigate } from 'react-router';
 
 export default function Profile() {
-
-  // Example profile data
-  const profileData = {
-    name: 'Tizio',
-    surname: 'Caio',
-    email: 'prova@mail.com',
-  };
+  
+  const {user, setUser} = useUser(); // Get the user context
+  const navigate = useNavigate(); // Get the navigate function from react-router
 
   // State to track which order's details are visible
   const [expandedOrder, setExpandedOrder] = useState(null);
@@ -22,10 +20,19 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login'); // Redirect to login if user is not logged in
+    }
+  }, [user, navigate]);
+  
+  useEffect(() => {
+    console.log('User:', user); // Log the user object
     const fetchData = async () => {
       try {
-        const ordersData = await getUserOrders(profileData.email); // Fetch orders dynamically
-        setOrders(ordersData); // Set the fetched orders
+        if (user) {
+          const ordersData = await getUserOrders(user.email); // Fetch orders dynamically
+          setOrders(ordersData); // Set the fetched orders
+        }  
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -33,12 +40,28 @@ export default function Profile() {
     };
 
     fetchData();
-  }, []);
-
+  }, [user]);
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
+
+    // Logout handler
+  const handleLogout = async () => {
+      try {
+        await logoutUser(); // Call the logout API
+        setUser(null); // Clear the user context
+        console.log('User logged out successfully');
+        navigate('/login'); // Redirect to login page
+      } catch (error) {
+        console.error('Error logging out:', error);
+      }
+    };
+
+  
+  if (!user) {
+    return <div>Please log in to view your profile.</div>; // Show a message if user is not logged in
+  }
 
   return (
     <Container className="mt-5">
@@ -47,9 +70,9 @@ export default function Profile() {
         <Col md={4}>
           <h3>Profile</h3>
           <ListGroup>
-            <ListGroup.Item><strong>Name:</strong> {profileData.name}</ListGroup.Item>
-            <ListGroup.Item><strong>Surname:</strong> {profileData.surname}</ListGroup.Item>
-            <ListGroup.Item><strong>Email:</strong> {profileData.email}</ListGroup.Item>
+            <ListGroup.Item><strong>Name:</strong> {user.name}</ListGroup.Item>
+            <ListGroup.Item><strong>Surname:</strong> {user.surname}</ListGroup.Item>
+            <ListGroup.Item><strong>Email:</strong> {user.email}</ListGroup.Item>
           </ListGroup>
         </Col>
 
@@ -117,7 +140,7 @@ export default function Profile() {
       {/* Logout Button */}
       <Row className="mt-4">
         <Col className="text-center">
-          <Button variant="danger" size="lg">Logout</Button>
+          <Button variant="danger" size="lg" onClick={handleLogout}>Logout</Button>
         </Col>
       </Row>
     </Container>
